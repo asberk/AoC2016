@@ -72,22 +72,25 @@ def _main(data):
     return results
 
 if __name__ == "__main__":
+    # Read input data
     with open('./input/day7input.csv', 'r') as fp:
         read_data = fp.read()
 
+    # Format the input data into separate vectors
     data = read_data.split('\n')[:-1]
     print(data[0])
 
-    results = _main(data)
+    # Debug / check against test cases
+    print('Check against test cases:')
+    test1 = 'aba[bab]xyz'
+    test2 = 'xyx[xyx]xyx'
+    test3 = 'aaa[kek]eke'
+    test4 = 'zazbz[bzb]cdb'
+    for t in [test1, test2, test3, test4]:
+        print(t)
+        print('\t{}'.format(valid_ABA_BAB(t)))
+
+    # Answer for part 2
     print('Answer to part 2:')
-    print(results)
-
-    # print('debugging...\n')
-
-    # test1 = 'aba[bab]xyz'
-    # test2 = 'xyx[xyx]xyx'
-    # test3 = 'aaa[kek]eke'
-    # test4 = 'zazbz[bzb]cdb'
-    # for t in [test1, test2, test3, test4]:
-    #     print(t)
-    #     print(valid_ABA_BAB(t))
+    results = _main(data)
+    print('\t{}'.format(results))

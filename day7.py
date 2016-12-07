@@ -6,21 +6,22 @@
 # import hashlib as hl
 
 
+alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+
 def palindrome_indices(s):
     # s is input string
-    print(s)
     idx = [j-1 for j in range(1, len(s)-2)
            if (s[j] == s[j+1])
            and s[j-1] == s[j+2]
            and not (s[j-1] == s[j])]
     return idx
 
+
 def bracket_indices(s):
     idxL = [j for j in range(len(s)) if s[j] is '[']
     idxR = [j for j in range(len(s)) if s[j] is ']']
-    idxZ = [(j, k) for j, k in zip(idxL, idxR)]
-    # print(idxZ)
-    return idxZ
+    return [(j, k) for j, k in zip(idxL, idxR)]
 
 
 def isBetweenBrackets(pidx, bracket_indices):
@@ -41,7 +42,7 @@ def validABBA(s):
 
 
 def _main(data):
-    results = 0 
+    results = 0
     for d in data:
         if validABBA(d):
             results += 1
@@ -49,12 +50,26 @@ def _main(data):
 
 
 if __name__ == "__main__":
+    # Read input data
     with open('./input/day7input.csv', 'r') as fp:
         read_data = fp.read()
 
+    # Format the input data into separate vectors
     data = read_data.split('\n')[:-1]
     print(data[0])
 
-    results = _main(data)
+    # Debugging / Checking Test Cases
+    t1 = 'abba[mnop]qrst'
+    t2 = 'abcd[bddb]xyyx'
+    t3 = 'aaaa[qwer]tyui'
+    t4 = 'ioxxoj[asdfgh]zxcvbn'
+
+    print('Check against test cases:')
+    for t in [t1, t2, t3, t4]:
+        print('\t{}'.format(t))
+        print(validABBA(t))
+
+    # Compute results for challenge
     print('Answer for first part is:')
+    results = _main(data)
     print(results)

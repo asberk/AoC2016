@@ -21,8 +21,7 @@ def _getUnmode(npvec):
 
 
 if __name__ == "__main__":
-    inputfile = '/Users/berkas/Dropbox/academic/coding/advent-of-code/input/day6input.csv'
-    data = pd.read_csv(inputfile, sep=' ', header=None)
+    data = pd.read_csv('./input/day6input.csv', sep=' ', header=None)
     data = data.values  # rows are short; want mode of each column
     outputcode = []
     for k in range(data.shape[1]):
@@ -30,9 +29,8 @@ if __name__ == "__main__":
     print('Answer for part 1:')
     print(''.join(outputcode))
 
-
     print('Answer for part 2:')
     outputcode = []
     for k in range(data.shape[1]):
-        outputcode.append(_getUnmode(data[:,k]))
+        outputcode.append(_getUnmode(data[:, k]))
     print(''.join(outputcode))

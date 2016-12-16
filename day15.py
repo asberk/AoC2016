@@ -24,8 +24,18 @@ def _parse(d):
 
 if __name__ == "__main__":
     data = load_data('./input/day15.txt')
+
+    print('Part 1')
     discs = [Disc(*_parse(d)) for d in data]
     N = 0
     while not all(d.activation(N) for d in discs):
         N += 1
-    print('First N is: {}'.format(N))
+    print('\tFirst N is: {}'.format(N))
+
+    print('\nPart 2')
+    discs2 = [Disc(*_parse(d)) for d in data]
+    discs2.append(Disc(discs2[-1].location+1, 11, 0, 0))
+    N2 = 0
+    while not all(d.activation(N2) for d in discs2):
+        N2 += 1
+    print('\tFirst N is: {}'.format(N2))

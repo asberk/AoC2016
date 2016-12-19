@@ -1,5 +1,8 @@
-from collections import deque
-# 1 2 3 4 5 6 7
+# # # # # #
+# Advent of Code 2016
+# Day 19
+# By Aaron Berk
+# # # # # #
 
 # White Elephant Winner
 def wew(pz, PRINT_OUTPUT=0):
@@ -17,22 +20,13 @@ def wew(pz, PRINT_OUTPUT=0):
     return elves[0]
 
 
-def wew2(pz, PRINT_OUTPUT=0):
-    elves = list(range(1, pz+1))
-    idx = 0
-    L = len(elves)
-    while L > 1:
-        rm = (idx + L//2) % L
-        if idx < 10 and PRINT_OUTPUT:
-            print('\t(at, taking): ({}, {})'.format(idx, rm))
-        del elves[rm]
-        if rm > idx:
-            idx = (idx + 1) % L
-        L = len(elves)
-    return elves[0]
+# second way of solving Josephus's problem
+def wew2(n):
+    b = bin(n)[2:]
+    return int(b[1:] + b[0], 2)
 
 
-class Node:
+class Elf:
     def __init__(self, id):
         self.id = id
         self.nxt = None
@@ -44,41 +38,47 @@ class Node:
 
 
 def solve(n):
-    l = list(map(Node, range(n)))
-    for j in range(n):
-        l[j].nxt = l[(j+1)%n]
-        l[j].prv = l[(j-1)%n]
+    # get a new n-tuple of elves
+    l = [Elf(j) for j in range(n)]
 
+    # set neighbours
+    for j in range(n):
+        l[j].nxt = l[(j+1) % n]
+        l[j].prv = l[(j-1) % n]
+
+    # starting elf and mid elf
     start = l[0]
     mid = l[n//2]
 
+    # loop through elves
     for j in range(n-1):
+        # kill the start elf's middle elf.
         mid.delete()
+        # the pattern for which middle elf is next
+        # alternates as:
+        #    +2, +1, +2, +1, ...
+        # or +1, +2, +1, +2, ...
+        # so just figure out which:
         mid = mid.nxt
         if (n-j) % 2 == 1:
             mid = mid.nxt
+        # now it's the next elf's turn to kill
         start = start.nxt
+    # there's one elf remaining after n-1 turns;
+    # return its name, which is its location id + 1
     return start.id + 1
 
 
 if __name__ == "__main__":
     pz = 3014603
 
-    print('Test data 1')
-    wew(5, True)  # 3
-    wew(7, True)  # 7
-    wew(8, True)  # 1
-    wew(9, True)  # 3
-
     print('\nPart 1')
     last_elf = wew(pz)
+    same_last_elf = wew2(pz)
     print('\tLast elf remaining is number {}.'.format(last_elf))
+    print('\tThe clever way still gets the same '
+          'answer: {}.'.format(same_last_elf))
     # Answer: 1834903
-
-    print('Test data 2')
-    for j in range(1, 10):
-        wj = wew2(j)
-        print('({2:05d}, {0}, {1})'.format(j, wj, int(bin(wj)[2:])))
 
     print('\nPart 2')
     new_last_elf = solve(pz)

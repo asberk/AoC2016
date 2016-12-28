@@ -1,5 +1,7 @@
 from load_data import load_data
 from collections import deque
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Node:
@@ -28,17 +30,13 @@ class Grid:
         self.X = maxX
         self.Y = maxY
         self.nodes = {}
-        for j in range(maxX):
-            self.nodes[j] = {}
-            for k in range(maxY):
-                self.nodes[j][k] = None
         return
 
     def get(self, x, y):
-        return self.nodes[x][y]
+        return self.nodes[(x, y)]
 
     def addNode(self, x=None, y=None, size=None, used=None):
-        self.nodes[x][y] = Node(x, y, size, used)
+        self.nodes[(x, y)] = Node(x, y, size, used)
         return
 
     def loadGrid(self, data):
@@ -49,11 +47,20 @@ class Grid:
     def viable(self):
         for x1 in range(self.X):
             for y1 in range(self.Y):
-                if self.nodes[x1][y1].used == 0:
+                if self.nodes[(x1, y1)].used == 0:
                     continue
                 for x2 in range(self.X):
                     for y2 in range(self.Y):
-                        self.nodes[x1][y1]._viable(self.nodes[x2][y2])
+                        self.nodes[(x1, y1)]._viable(self.nodes[(x2, y2)])
+
+    def gridImage(self):
+        viz = np.zeros((self.Y+1, self.X+1))
+        for x in range(self.X):
+            for y in range(self.Y):
+                viz[y, x] = self.nodes[(x, y)].pctfull
+        plt.matshow(viz)
+        plt.show()
+        return
 
 
 def parse(d):
@@ -84,5 +91,7 @@ if __name__ == "__main__":
     print(len(viable_pairs))
 
     print('Part 2')
-    gd = Grid(maxX+1, maxY+1)  # counts from 0
+    gd = Grid(maxX, maxY)  # counts from 0
     gd.loadGrid(data[2:])
+    gd.gridImage()
+    # Answer: 205; solved by hand after looking at the plot.
